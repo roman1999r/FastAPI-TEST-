@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
   api:
@@ -6,23 +6,26 @@ services:
       context: "."
       dockerfile: Dockerfile
     container_name: "FastApi"
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-    volumes:
-      - .:/
+    network_mode: host
+    #command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     ports:
-      - "8000:8000"
+      - "8000:000"
+    command: bash -c "uvicorn main:app --reload"
     depends_on:
       - postgresql
 
   postgresql:
     image: postgres
     container_name: "postgresql"
-    volumes:
-      - postgresql_data:/var/lib/postgresql/data/
+    restart: always
     environment:
-      - POSTGRES_USER=username
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_DB=blog
     ports:
       - "5432:5432"
+    volumes:
+      - postgresql:/var/lib/postgresql/data
 volumes:
-  postgresql_data:
+  postgresql:
+    driver: local

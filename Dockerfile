@@ -1,17 +1,14 @@
 #
-FROM python:3.7
+FROM python:3.8
 
-
+ENV PIP_DISABLE_PIP_VERSION_CHECK=on
 #
+
+EXPOSE 8000
+COPY Pipfile Pipfile.lock ./
+RUN python -m pip install --upgrade pip
+RUN pip install pipenv && pipenv install --dev --system --deploy
+
 WORKDIR /app
+COPY . /app
 
-#
-COPY ./requirements.txt requirements.txt
-
-RUN pip install --upgrade pip
-RUN pip install requirements.txt
-#
-COPY  . .
-
-#
-#CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
