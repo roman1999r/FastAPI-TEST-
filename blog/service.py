@@ -24,4 +24,5 @@ def create_post(db: Session, item: PostCreate):
     db.commit()
     db.refresh(post)
     logger.info(f'{post.title} was create {post.date}')
+    print(logger)
     return post
